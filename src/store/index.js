@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import auth from './modules/auth'
+import persona from './modules/persona'
+import alerta from './modules/alerta'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+const store = new Vuex.Store({
+    modules: {
+        auth,
+        persona,
+        alerta
+    }
 })
+export default store

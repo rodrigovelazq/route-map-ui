@@ -13,6 +13,7 @@
     "vue": "^2.6.11",
     "vue-router": "^3.4.2",
     "vue2-google-maps": "^0.10.7",
+    "vuelayers": "^0.11.27",
     "vuelidate": "^0.7.5",
     "vuetify": "^2.3.8",
     "vuex": "^3.5.1"

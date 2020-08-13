@@ -3,7 +3,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-//import * as VueGoogleMaps from 'vue2-google-maps'
+import VueLayers from 'vuelayers'
+import 'vuelayers/lib/style.css' // needs css-loader
+//import * as VueGoogleMaps from 'vue2-google-maps  '
 
 Vue.config.productionTip = false
 
@@ -32,6 +34,8 @@ Vue.config.productionTip = false
   //// If you want to automatically install all the components this property must be set to 'true':
   installComponents: true
 })*/
+
+Vue.use(VueLayers)
 
 new Vue({
   router,

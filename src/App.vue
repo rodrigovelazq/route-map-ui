@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-card
+        v-if="isLoggedIn"
         color="grey lighten-4"
         flat
         tile
@@ -12,13 +13,14 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon>
+        <v-btn icon @click="logout">
           <v-icon>mdi-exit-to-app</v-icon>
         </v-btn>
       </v-toolbar>
     </v-card>
 
     <v-main>
+      <Alerta />
       <v-container class="fill-height">
         <v-row
             align="center"
@@ -69,16 +71,45 @@
 </template>
 
 <script>
+import Alerta from "./components/Alerta";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
   name: 'App',
+  components: {
+    Alerta
+  },
+  computed: mapGetters({
+    isLoggedIn: "auth/isLoggedIn"
+  }),
+  methods: {
+    ...mapActions({
+      logoutAction: "auth/logout",
+    }),
+    logout: function () {
+      this.$store.dispatch('auth/logout')
+          .then(() => {
+            //this.$router.push('/login')
+          })
+    }
+  },
+/*  created: function () {
+    http.interceptors.response.use(undefined, function (err) {
+      return new Promise(function () {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch('auth/logout')
+        }
+        throw err;
+      });
+    });
+  },*/
   data() {
     return {
       drawer: false,
       items: [
         {title: 'Home', icon: 'mdi-home', link:'/'},
         {title: 'About', icon: 'mdi-help-circle', link:'/about'},
-        {title: 'User', icon: 'mdi-account', link:'/userList'},
+        {title: 'Persona', icon: 'mdi-human', link:'/personaList'},
       ],
     }
   },
