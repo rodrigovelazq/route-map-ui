@@ -13,14 +13,15 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon @click="logout">
+        <v-btn icon @click="logoutAction">
           <v-icon>mdi-exit-to-app</v-icon>
         </v-btn>
       </v-toolbar>
     </v-card>
 
     <v-main>
-      <Alerta />
+      <Progress />
+      <Snackbar />
       <v-container class="fill-height">
         <v-row
             align="center"
@@ -71,38 +72,26 @@
 </template>
 
 <script>
-import Alerta from "./components/Alerta";
+import Snackbar from "./components/Snackbar";
+import Progress from "./components/Progress";
 import {mapGetters, mapActions} from "vuex";
 
 export default {
   name: 'App',
   components: {
-    Alerta
+    Snackbar,
+    Progress
   },
   computed: mapGetters({
     isLoggedIn: "auth/isLoggedIn"
   }),
   methods: {
     ...mapActions({
-      logoutAction: "auth/logout",
-    }),
-    logout: function () {
-      this.$store.dispatch('auth/logout')
-          .then(() => {
-            //this.$router.push('/login')
-          })
-    }
+      logoutAction: "auth/logout"
+    })
   },
-/*  created: function () {
-    http.interceptors.response.use(undefined, function (err) {
-      return new Promise(function () {
-        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-          this.$store.dispatch('auth/logout')
-        }
-        throw err;
-      });
-    });
-  },*/
+  created() {
+  },
   data() {
     return {
       drawer: false,

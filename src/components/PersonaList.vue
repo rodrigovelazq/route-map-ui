@@ -1,7 +1,7 @@
 <template>
   <v-data-table
       :headers="headers"
-      :items="personas"
+      :items="data"
       sort-by="calories"
       class="elevation-1">
     <template v-slot:top>
@@ -13,7 +13,7 @@
             vertical
         ></v-divider>
         <v-spacer></v-spacer>
-        <router-link to="/user">
+        <router-link to="/personaForm">
           <v-btn
               color="primary"
               dark
@@ -54,7 +54,7 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <router-link :to="'/user/'+item.id">
+      <router-link :to="'/personaForm/'+item.id">
         <v-icon
             small
             class="mr-2"
@@ -78,7 +78,7 @@ import {mapGetters, mapActions} from "vuex";
 export default {
   name: "PersonaList",
   computed: mapGetters({
-    personas: "persona/personas"
+    data: "persona/data"
   }),
   methods: {
     ...mapActions({

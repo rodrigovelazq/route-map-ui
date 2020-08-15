@@ -26,14 +26,19 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   name: "Login",
   computed: {
-    isLoggedIn: function () {
-      return this.$store.getters["auth/isLoggedIn"]
-    }
+    ...mapGetters({
+      isLoggedIn: "auth/isLoggedIn"
+    })
   },
   methods: {
+    ...mapActions({
+      login: "auth/login"
+    }),
     toRegister() {
       this.$router.push('/register')
     },
@@ -42,9 +47,7 @@ export default {
         name: this.name,
         password: this.password
       }
-      this.$store.dispatch('auth/login', credential)
-          .then(() => this.$router.push('/'))
-          .catch(err => console.log(err));
+      this.login(credential);
     },
     clear() {
       this.name = ''

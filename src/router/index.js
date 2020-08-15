@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import Register from '../components/Register'
 import Login from '../components/Login'
 import PersonaList from '../components/PersonaList'
+import PersonaForm from '../components/PersonaForm'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,22 @@ const router = new VueRouter({
             path: '/personaList',
             name: 'PersonaList',
             component: PersonaList,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/personaForm',
+            name: 'PersonaForm',
+            component: PersonaForm,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/personaForm/:id',
+            name: 'PersonaForm',
+            component: PersonaForm,
             meta: {
                 requiresAuth: true
             }

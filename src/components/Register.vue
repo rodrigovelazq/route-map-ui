@@ -80,7 +80,6 @@ export default {
           password: this.password,
           password_confirmation: this.password_confirmation
         }
-
         this.$store.dispatch('auth/registerUser', newUser);
       }
     },
