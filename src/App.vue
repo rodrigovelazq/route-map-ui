@@ -6,7 +6,7 @@
         flat
         tile
     >
-      <v-toolbar dense>
+      <v-toolbar color="primary" :dark="true" dense>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
         <v-toolbar-title>Route Map v1.0</v-toolbar-title>
@@ -34,6 +34,8 @@
 
     </v-main>
     <v-navigation-drawer
+        color="primary"
+        :dark="true"
         v-model="drawer"
         absolute
         temporary

@@ -2,10 +2,15 @@
   <v-data-table
       :headers="headers"
       :items="data"
-      sort-by="calories"
-      class="elevation-1">
+      :options.sync="pagination"
+      :server-items-length="pagination.totalItems"
+      :items-per-page="pagination.itemsPerPage"
+      :page="pagination.page"
+      :sort-by="pagination.sortBy"
+      :sort-desc="pagination.sortDesc"
+      class="elevation-2">
     <template v-slot:top>
-      <v-toolbar flat color="white">
+      <v-toolbar flat color="primary white--text">
         <v-toolbar-title>Persona</v-toolbar-title>
         <v-divider
             class="mx-4"
@@ -73,17 +78,32 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 
 export default {
   name: "PersonaList",
-  computed: mapGetters({
-    data: "persona/data"
-  }),
+  computed: {
+    ...mapGetters({
+      data: "persona/data",
+      getPagination: "persona/pagination",
+    }),
+    pagination: {
+      get() {
+        return this.getPagination
+      },
+      set(value) {
+        const {itemsPerPage, page, totalItems, sortBy, sortDesc} = value;
+        this.getAll({itemsPerPage, page, totalItems, sortBy, sortDesc});
+      }
+    },
+  },
   methods: {
     ...mapActions({
       getAll: "persona/getAll",
-      delete: "persona/delete"
+      delete: "persona/delete",
+    }),
+    ...mapMutations({
+      paginationChanged: "persona/paginationChanged"
     }),
     deleteItem() {
       this.dialog = false;
@@ -92,26 +112,24 @@ export default {
     openDialog(item) {
       this.selected = item;
       this.dialog = true;
-    }
+    },
   },
   created() {
-    this.getAll();
+    this.getAll(this.pagination);
   },
   data() {
     return {
+      /*footerprops: {
+        'items-per-page-options': [5, 10, 20, 'Todos']
+      },*/
       selected: null,
       dialog: false,
       headers: [
-        {
-          text: 'Nombre',
-          align: 'start',
-          sortable: false,
-          value: 'nombre',
-        },
-        {text: 'Apellido', value: 'apellido', sortable: false},
-        {text: 'Cedula', value: 'ci', sortable: false},
-        {text: 'Telefono', value: 'telefono', sortable: false},
-        {text: 'Direccion', value: 'direccion', sortable: false},
+        {text: 'Nombre', value: 'nombre', sortable: true},
+        {text: 'Apellido', value: 'apellido', sortable: true},
+        {text: 'Cedula', value: 'cedula', sortable: true},
+        {text: 'Telefono', value: 'telefono', sortable: true},
+        {text: 'Direccion', value: 'direccion', sortable: true},
         {text: 'Actions', value: 'actions', sortable: false}
       ],
     }

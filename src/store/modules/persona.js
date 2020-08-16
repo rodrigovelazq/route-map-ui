@@ -11,6 +11,13 @@ const state = () => ({
         telefono: '',
         direccion: ''
     },
+    pagination: {
+        page: 1,
+        itemsPerPage: 5,
+        totalItems: 0,
+        sortBy: ['id'],
+        sortDesc: [false],
+    },
     error: null
 })
 
@@ -18,26 +25,31 @@ const getters = {
     data: state => state.data,
     error: state => state.error,
     item: state => state.item,
+    pagination: state => state.pagination,
 }
 
 const actions = {
-    getAll({commit, dispatch}) {
+    getAll({commit, dispatch}, pagination) {
         commit('dataRequested')
-        http.get('/persona').then(
-            resp => {
-                commit('dataRequestedSucceeded',  resp.data.data)
+        const {page, itemsPerPage, sortBy, sortDesc} = pagination;
+        const params = (sortBy && sortDesc) ? {page, itemsPerPage, 'sortBy': sortBy[0], 'sortDesc' : sortDesc[0]} : {page, itemsPerPage};
+        http.get('/persona', {params}).then(resp => {
+                const {data, total} = resp.data.data;
+                commit('paginationChanged', {...pagination, totalItems: total})
+                commit('dataRequestedSucceeded', data)
             }
         ).catch(err => {
             dispatch('snackbar/showError', 'Ocurrio un error al momento de recuperar las Personas', {root: true});
             commit('dataRequestedFailed', err)
         });
     },
-    delete({commit, dispatch}, item) {
+    delete({commit, dispatch, getters}, item) {
         commit('deleteRequested')
         http.delete(`/persona/${item.id}`).then(
             () => {
                 commit('deleteSucceded')
-                dispatch('getAll');
+                commit('paginationReseted');
+                dispatch('getAll', getters.pagination);
                 dispatch('snackbar/showSucess', 'Se elimino el item satisfactoriamente', {root: true});
             }
         ).catch(err => {
@@ -73,12 +85,27 @@ const actions = {
             commit('saveFailed', err)
         });
     },
-    clear({commit}){
+    clear({commit}) {
         commit('clear');
     }
 }
 
 const mutations = {
+    /*PAGER*/
+    paginationChanged(state, pagination) {
+        state.status = 'PAGINATION_CHANGED_PERSONA'
+        state.pagination = pagination
+    },
+    paginationReseted(state) {
+        state.status = 'PAGINATION_RESETED_PERSONA';
+        state.pagination = {
+            page : 1,
+            itemsPerPage: 5,
+            totalItems: 0,
+            sortBy: ['id'],
+            sortDesc: [false],
+        }
+    },
     /*GETALL*/
     dataRequested(state) {
         state.status = 'DATA_REQUESTED_PERSONA'
@@ -106,7 +133,7 @@ const mutations = {
     itemRequested(state) {
         state.status = 'ITEM_REQUESTED_PERSONA'
     },
-    itemRequestedSucceded(state,item) {
+    itemRequestedSucceded(state, item) {
         state.status = 'ITEM_REQUESTED_SUCCEDED_PERSONA';
         state.item = item;
     },
@@ -137,7 +164,7 @@ const mutations = {
             direccion: ''
         }
     },
-    formInputChanged(state, { field, value }) {
+    formInputChanged(state, {field, value}) {
         state.status = 'FORM_INPUT_CHANGED'
         state.item[field] = value
     }

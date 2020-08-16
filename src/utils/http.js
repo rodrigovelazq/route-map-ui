@@ -43,6 +43,8 @@ axiosInstance.interceptors.response.use(function (response) {
                     reject(err);
                 });
         })
+    }else if(error.response.status === 400){
+        store.dispatch('auth/logout');
     }
 
     return Promise.reject(error);

@@ -19,8 +19,8 @@ const actions = {
             http.post('/auth/register', newUser).then(
                 resp => {
                     commit('registerSucceded');
-                    router.push('/login');
                     dispatch('snackbar/showSucess', 'Se registro satisfactoriamente', {root: true});
+                    router.push('/login');
                     resolve(resp)
                 }
             ).catch(err => {
@@ -40,7 +40,7 @@ const actions = {
                 localStorage.setItem('token', token)
                 // Add the following line:
                 http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                commit('authSucceded', token, user)
+                commit('authSucceded', {token, user})
                 dispatch('snackbar/showSucess', 'Se autentico satisfactoriamente', {root: true});
                 router.push('/');
             })
@@ -54,7 +54,7 @@ const actions = {
             commit('authLogout')
             localStorage.removeItem('token')
             delete http.defaults.headers.common['Authorization']
-            router.push('/login');
+            router.push('/login').catch(()=>{});
             resolve()
         })
     }
@@ -75,7 +75,7 @@ const mutations = {
     authRequested(state) {
         state.status = 'AUTH_REQUEST'
     },
-    authSucceded(state, token, user) {
+    authSucceded(state, {token, user}) {
         state.status = 'AUTH_SUCCESS'
         state.token = token
         state.user = user
