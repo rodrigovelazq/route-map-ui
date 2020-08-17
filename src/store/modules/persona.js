@@ -1,5 +1,8 @@
 import http from '../../utils/http'
 import router from "../../router";
+import {formMutationsForScope} from "../../helpers/form";
+import {dataTableMutationsForScope} from "../../helpers/datatable";
+import {deleteMutationForScope} from "../../helpers/delete";
 
 const state = () => ({
     status: '',
@@ -18,6 +21,7 @@ const state = () => ({
         sortBy: ['id'],
         sortDesc: [false],
     },
+    selected: null,
     error: null
 })
 
@@ -26,6 +30,7 @@ const getters = {
     error: state => state.error,
     item: state => state.item,
     pagination: state => state.pagination,
+    selected: state => state.selected
 }
 
 const actions = {
@@ -43,14 +48,14 @@ const actions = {
             commit('dataRequestedFailed', err)
         });
     },
-    delete({commit, dispatch, getters}, item) {
+    delete({commit, dispatch, getters}) {
         commit('deleteRequested')
-        http.delete(`/persona/${item.id}`).then(
+        http.delete(`/persona/${getters.selected.id}`).then(
             () => {
-                commit('deleteSucceded')
-                commit('paginationReseted');
+                commit('deleteSucceeded')
+                commit('paginationReset');
                 dispatch('getAll', getters.pagination);
-                dispatch('snackbar/showSucess', 'Se elimino el item satisfactoriamente', {root: true});
+                dispatch('snackbar/showSuccess', 'Se elimino el item satisfactoriamente', {root: true});
             }
         ).catch(err => {
             dispatch('snackbar/showError', 'Ocurrio un error al momento de eliminar el item', {root: true});
@@ -61,7 +66,7 @@ const actions = {
         commit('itemRequested')
         http.get(`/persona/${id}`).then(
             resp => {
-                commit('itemRequestedSucceded', resp.data.data);
+                commit('itemRequestedSucceeded', resp.data.data);
             }
         ).catch(err => {
             dispatch('snackbar/showError', 'Ocurrio un error al momento de recuperar el item', {root: true});
@@ -76,8 +81,8 @@ const actions = {
             data: item
         }).then(
             resp => {
-                commit('saveSucceded', resp.data)
-                dispatch('snackbar/showSucess', 'Se guardo el item satisfactoriamente', {root: true});
+                commit('saveSucceeded', resp.data)
+                dispatch('snackbar/showSuccess', 'Se guardo el item satisfactoriamente', {root: true});
                 router.push('/personaList');
             }
         ).catch(err => {
@@ -85,77 +90,18 @@ const actions = {
             commit('saveFailed', err)
         });
     },
-    clear({commit}) {
-        commit('clear');
+    cleanForm({commit}) {
+        commit('cleanForm');
     }
 }
 
 const mutations = {
-    /*PAGER*/
-    paginationChanged(state, pagination) {
-        state.status = 'PAGINATION_CHANGED_PERSONA'
-        state.pagination = pagination
-    },
-    paginationReseted(state) {
-        state.status = 'PAGINATION_RESETED_PERSONA';
-        state.pagination = {
-            page : 1,
-            itemsPerPage: 5,
-            totalItems: 0,
-            sortBy: ['id'],
-            sortDesc: [false],
-        }
-    },
-    /*GETALL*/
-    dataRequested(state) {
-        state.status = 'DATA_REQUESTED_PERSONA'
-    },
-    dataRequestedSucceeded(state, data) {
-        state.status = 'DATA_REQUEST_SUCCEEDED_PERSONA';
-        state.data = data
-    },
-    dataRequestedFailed(state, error) {
-        state.status = 'DATA_REQUEST_FAILED_PERSONA';
-        state.error = error
-    },
-    /*DELETE*/
-    deleteRequested(state) {
-        state.status = 'DELETE_REQUESTED_PERSONA'
-    },
-    deleteSucceded(state) {
-        state.status = 'DELETE_SUCCEDED_PERSONA';
-    },
-    deleteFailed(state, error) {
-        state.status = 'DELETE_FAILED_PERSONA';
-        state.error = error
-    },
-    /*GET*/
-    itemRequested(state) {
-        state.status = 'ITEM_REQUESTED_PERSONA'
-    },
-    itemRequestedSucceded(state, item) {
-        state.status = 'ITEM_REQUESTED_SUCCEDED_PERSONA';
-        state.item = item;
-    },
-    itemRequestedFailed(state, error) {
-        state.status = 'ITEM_REQUESTED_FAILED_PERSONA';
-        state.error = error
-    },
-    /*SAVE*/
-    saveRequested(state) {
-        state.status = 'SAVE_REQUESTED_PERSONA';
-    },
-    saveSucceded(state, item) {
-        state.status = 'SAVE_SUCCEDED_PERSONA';
-        state.item = item;
-    },
-    saveFailed(state, error) {
-        state.status = 'SAVE_FAILED_PERSONA';
-        state.error = error
-    },
+    ...deleteMutationForScope('persona'),
+    ...dataTableMutationsForScope('persona'),
+    ...formMutationsForScope('persona'),
     /*CLEAR*/
-    clear(state) {
-        state.status = 'CLEAR_PERSONA';
+    cleanForm(state) {
+        state.status = 'persona_clean_form';
         state.item = {
             nombre: '',
             apellido: '',
@@ -164,10 +110,6 @@ const mutations = {
             direccion: ''
         }
     },
-    formInputChanged(state, {field, value}) {
-        state.status = 'FORM_INPUT_CHANGED'
-        state.item[field] = value
-    }
 }
 
 export default {

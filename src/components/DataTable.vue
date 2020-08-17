@@ -11,7 +11,7 @@
       class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat color="primary white--text">
-        <v-toolbar-title>Persona</v-toolbar-title>
+        <v-toolbar-title>{{title}}</v-toolbar-title>
         <v-divider
             class="mx-4"
             inset
@@ -22,35 +22,29 @@
           <v-btn
               color="primary"
               dark
-              class="mb-2">New Item
+              class="mb-2">Nuevo
           </v-btn>
         </router-link>
-
         <v-dialog
             v-model="dialog"
             max-width="290">
           <v-card>
             <v-card-title class="headline">Alerta</v-card-title>
             <v-card-text>
-              Desea eliminar el usuario?
+              Desea eliminar el item?
             </v-card-text>
-
             <v-card-actions>
               <v-spacer></v-spacer>
-
               <v-btn
                   color="green darken-1"
                   text
-                  @click="dialog = false"
-              >
+                  @click="dialog = false">
                 No
               </v-btn>
-
               <v-btn
                   color="green darken-1"
                   text
-                  @click="deleteItem()"
-              >
+                  @click="deleteItem()">
                 Si
               </v-btn>
             </v-card-actions>
@@ -59,92 +53,73 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <router-link :to="'/personaForm/'+item.id">
+      <router-link :to="`/${formUrl}`+item.id" v-if="formUrl">
         <v-icon
             small
-            class="mr-2"
-        >
+            class="mr-2">
           mdi-pencil
         </v-icon>
       </router-link>
       <v-icon
           small
-          @click="openDialog(item)"
-      >
+          @click="openDialog(item)">
         mdi-delete
       </v-icon>
     </template>
   </v-data-table>
-<!--  <DataTable
-      :headers="headers"
-      title="Persona"
-      formUrl="personaForm/"
-      :get-pagination="pagination"
-      :data="data"
-      :delete="this.delete"
-      :getAll="this.getAll"
-      :do-delete="this.doDelete">
-  </DataTable>-->
-
 </template>
 
 <script>
-import {mapGetters, mapActions, mapMutations} from "vuex";
-//import DataTable from './DataTable'
 
 export default {
-  name: "PersonaList",
-  //components: {DataTable},
+  name: "DataTable",
   computed: {
-    ...mapGetters({
-      data: "persona/data",
-      getPagination: "persona/pagination",
-    }),
+    /*...mapGetters({
+      data: `${scope}/data`,
+      getPagination: `${scope}/pagination`,
+    }),*/
     pagination: {
       get() {
-        return this.getPagination
+        return this.getPagination;
       },
       set(value) {
         const {itemsPerPage, page, totalItems, sortBy, sortDesc} = value;
-        this.getAll({itemsPerPage, page, totalItems, sortBy, sortDesc});
+        this.$emit('getAll', {itemsPerPage, page, totalItems, sortBy, sortDesc})
       }
     },
   },
   methods: {
-    ...mapActions({
-      getAll: "persona/getAll",
-      delete: "persona/delete",
+    /*...mapActions({
+      getAll: `${scope}/getAll`,
+      delete: `${scope}/delete`,
     }),
     ...mapMutations({
-      doDelete: "persona/doDelete",
-    }),
+      doDelete: `${scope}/doDelete`,
+    }),*/
     deleteItem() {
       this.dialog = false;
-      this.delete();
+      this.$emit('delete')
+      //this.delete();
     },
     openDialog(item) {
-      this.doDelete(item)
+      this.$emit('doDelete', item)
+      //this.doDelete(item)
       this.dialog = true;
     },
   },
   created() {
-    this.getAll(this.pagination);
+    this.$emit('getAll', this.pagination)
+    //this.getAll(this.pagination);
   },
+  props: ['headers', 'title', 'formUrl', 'getAll', 'delete', 'doDelete', 'data', 'getPagination'],
   data() {
     return {
       /*footerprops: {
         'items-per-page-options': [5, 10, 20, 'Todos']
       }
+      selected: null,
       */
       dialog: false,
-      headers: [
-        {text: 'Nombre', value: 'nombre', sortable: true},
-        {text: 'Apellido', value: 'apellido', sortable: true},
-        {text: 'Cedula', value: 'cedula', sortable: true},
-        {text: 'Telefono', value: 'telefono', sortable: true},
-        {text: 'Direccion', value: 'direccion', sortable: true},
-        {text: 'Actions', value: 'actions', sortable: false}
-      ],
     }
   }
 }

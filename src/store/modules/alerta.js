@@ -12,11 +12,11 @@ const getters = {
 }
 
 const actions = {
-    showSucess({commit}, message) {
-        commit('showSucessAlert', message)
+    showSuccess({commit}, message) {
+        commit('showSuccessAlert', message)
     },
-    dismissSucess({commit}) {
-        commit('dismissSucessAlert')
+    dismissSuccess({commit}) {
+        commit('dismissSuccessAlert')
     },
     showError({commit}, message) {
         commit('showErrorAlert', message)
@@ -27,13 +27,13 @@ const actions = {
 }
 
 const mutations = {
-    showSucessAlert(state, message) {
-        state.status = 'SHOW_SUCESS_ALERT';
+    showSuccessAlert(state, message) {
+        state.status = 'SHOW_SUCCESS_ALERT';
         state.success = true;
         state.message = message
     },
-    dismissSucessAlert(state) {
-        state.status = 'DISMISS_SUCESS_ALERT';
+    dismissSuccessAlert(state) {
+        state.status = 'DISMISS_SUCCESS_ALERT';
         state.success = false;
         state.message = ''
     },

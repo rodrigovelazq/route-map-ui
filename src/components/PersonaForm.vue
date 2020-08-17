@@ -28,7 +28,8 @@
         v-model="item.direccion"
         label="Dirección"
     ></v-text-field>
-    <v-btn class="mr-4" @click="submit">submit</v-btn>
+    <v-btn class="mr-4" @click="submit" color="primary">guardar</v-btn>
+    <v-btn class="mr-4" @click="$router.go(-1)" color="error">cancelar</v-btn>
   </form>
 </template>
 

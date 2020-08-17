@@ -18,8 +18,8 @@ const getters = {
 }
 
 const actions = {
-    showSucess({commit}, text) {
-        commit('showSucessSnackbar', text)
+    showSuccess({commit}, text) {
+        commit('showSuccessSnackbar', text)
     },
     showError({commit}, text) {
         commit('showErrorSnackbar', text)
@@ -30,9 +30,9 @@ const actions = {
 }
 
 const mutations = {
-    showSucessSnackbar(state, text) {
-        state.status = 'SHOW_SUCESS_SNACKBAR';
-        state.color = 'sucess';
+    showSuccessSnackbar(state, text) {
+        state.status = 'SHOW_SUCCESS_SNACKBAR';
+        state.color = 'success';
         state.show = true;
         state.text = text;
     },

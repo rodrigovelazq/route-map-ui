@@ -4,7 +4,7 @@
         v-model="success"
         type="success"
         text
-        @click="dismissSucess">
+        @click="dismissSuccess">
       {{message}}
     </v-alert>
 
@@ -32,9 +32,9 @@ export default {
   methods: {
     ...mapActions({
       dismissError: "alerta/dismissError",
-      dismissSucess: "alerta/dismissSucess",
+      dismissSuccess: "alerta/dismissSuccess",
       showError: "alerta/showError",
-      showSucess: "alerta/showSucess"
+      showSuccess: "alerta/showSuccess"
     })
   },
 }

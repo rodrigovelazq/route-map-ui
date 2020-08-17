@@ -33,7 +33,7 @@ name: "Snackbar",
     ...mapActions({
       dismiss: "snackbar/dismiss",
       showError: "snackbar/showError",
-      showSucess: "snackbar/showSucess"
+      showSuccess: "snackbar/showSuccess"
     }),
   },
 }
