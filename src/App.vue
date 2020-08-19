@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import Snackbar from "./components/Snackbar";
-import Progress from "./components/Progress";
+import Snackbar from "./components/utils/snackbar/Snackbar";
+import Progress from "./components/utils/progress/Progress";
 import {mapGetters, mapActions} from "vuex";
 
 export default {

@@ -3,6 +3,7 @@ import router from "../../router";
 import {formMutationsForScope} from "../../helpers/form";
 import {dataTableMutationsForScope} from "../../helpers/datatable";
 import {deleteMutationForScope} from "../../helpers/delete";
+import {required} from "vuelidate/lib/validators";
 
 const state = () => ({
     status: '',
@@ -22,7 +23,11 @@ const state = () => ({
         sortDesc: [false],
     },
     selected: null,
-    error: null
+    error: null,
+    validations: {
+        nombre: {required},
+        apellido: {required},
+    }
 })
 
 const getters = {
@@ -30,7 +35,7 @@ const getters = {
     error: state => state.error,
     item: state => state.item,
     pagination: state => state.pagination,
-    selected: state => state.selected
+    selected: state => state.selected,
 }
 
 const actions = {

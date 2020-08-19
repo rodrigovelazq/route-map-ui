@@ -62,30 +62,30 @@ const actions = {
 
 const mutations = {
     registerRequested(state) {
-        state.status = 'REGISTER_REQUEST'
+        state.status = 'register_request'
     },
     registerSucceeded(state) {
-        state.status = 'REGISTER_REQUEST'
+        state.status = 'register_request'
     },
     registerFailed(state, error) {
-        state.status = 'REGISTER_REQUEST'
+        state.status = 'register_request'
         state.error = error
     },
 
     authRequested(state) {
-        state.status = 'AUTH_REQUEST'
+        state.status = 'auth_request'
     },
     authSucceeded(state, {token, user}) {
-        state.status = 'AUTH_SUCCESS'
+        state.status = 'auth_success'
         state.token = token
         state.user = user
     },
     authFailed(state, error) {
-        state.status = 'AUTH_ERROR';
+        state.status = 'auth_error';
         state.error = error;
     },
     authLogout(state) {
-        state.status = 'AUTH_LOGOUT'
+        state.status = 'auth_logout'
         state.token = ''
     },
 }

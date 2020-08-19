@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import auth from './modules/auth'
-import persona from './modules/persona'
-import alerta from './modules/alerta'
-import snackbar from './modules/snackbar'
-import progress from './modules/progress'
+import auth from '../components/auth/auth'
+import persona from '../components/persona/persona'
+import alerta from '../components/utils/alerta/alerta'
+import snackbar from '../components/utils/snackbar/snackbar'
+import progress from '../components/utils/progress/progress'
 
 Vue.use(Vuex)
 

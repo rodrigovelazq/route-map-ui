@@ -2,10 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
 import Home from '../views/Home.vue'
-import Register from '../components/Register'
-import Login from '../components/Login'
-import PersonaList from '../components/PersonaList'
-import PersonaForm from '../components/PersonaForm'
+import Register from '../components/auth/Register'
+import Login from '../components/auth/Login'
+import PersonaList from '../components/persona/PersonaList'
+import PersonaForm from '../components/persona/PersonaForm'
 
 Vue.use(VueRouter)
 
