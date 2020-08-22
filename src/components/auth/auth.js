@@ -38,11 +38,12 @@ const actions = {
                 const token = resp.data.token
                 const user = resp.data.user
                 localStorage.setItem('token', token)
+                localStorage.setItem('user', JSON.stringify(user))
                 // Add the following line:
                 http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 commit('authSucceeded', {token, user})
                 dispatch('snackbar/showSuccess', 'Se autentico satisfactoriamente', {root: true});
-                router.push('/');
+                router.push('/').catch(()=>{});
             })
             .catch(err => {
                 commit('authFailed', err)
@@ -53,6 +54,7 @@ const actions = {
         return new Promise((resolve) => {
             commit('authLogout')
             localStorage.removeItem('token')
+            localStorage.removeItem('user')
             delete http.defaults.headers.common['Authorization']
             router.push('/login').catch(()=>{});
             resolve()

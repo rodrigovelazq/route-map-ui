@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
 import Home from '../views/Home.vue'
+import NoAutorizado from '../views/NoAutorizado'
 import Register from '../components/auth/Register'
 import Login from '../components/auth/Login'
 import PersonaList from '../components/persona/PersonaList'
@@ -19,6 +20,11 @@ const router = new VueRouter({
             meta: {
                 requiresAuth: true
             }
+        },
+        {
+            path: '/noAutorizado',
+            name: 'NoAutorizado',
+            component: NoAutorizado,
         },
         {
             path: '/about',
@@ -46,7 +52,8 @@ const router = new VueRouter({
             name: 'PersonaList',
             component: PersonaList,
             meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                permiso: 'index_persona'
             }
         },
         {
@@ -54,7 +61,8 @@ const router = new VueRouter({
             name: 'PersonaForm',
             component: PersonaForm,
             meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                permiso: 'create_persona'
             }
         },
         {
@@ -62,7 +70,8 @@ const router = new VueRouter({
             name: 'PersonaForm',
             component: PersonaForm,
             meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                permiso: 'update_persona'
             }
         },
     ]
@@ -71,8 +80,15 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if(to.matched.some(record => record.meta.requiresAuth)) {
         if (store.getters["auth/isLoggedIn"]) {
-            next()
-            return
+            const user = JSON.parse(localStorage.getItem('user'));
+            const { permiso } = to.meta;
+            if(!permiso || user.permisos.find(p => p.nombre === permiso)){
+                next()
+                return
+            }else{
+                next('/noAutorizado')
+                return
+            }
         }
         next('/login')
     } else {

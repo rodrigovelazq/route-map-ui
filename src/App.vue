@@ -58,15 +58,16 @@
             v-for="item in items"
             :key="item.title"
             :to="item.link"
-            link
-        >
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
+            link>
+          <template v-if="show(item.permiso)">
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
 
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </template>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -90,7 +91,17 @@ export default {
   methods: {
     ...mapActions({
       logoutAction: "auth/logout"
-    })
+    }),
+    show(permiso){
+      if(this.isLoggedIn){
+        if(!permiso){
+          return true;
+        }
+        const user = JSON.parse(localStorage.getItem('user'))
+        return user.permisos.find(p => p.nombre === permiso) ? true : false
+      }
+      return false
+    }
   },
   created() {
   },
@@ -100,7 +111,7 @@ export default {
       items: [
         {title: 'Home', icon: 'mdi-home', link:'/'},
         {title: 'About', icon: 'mdi-help-circle', link:'/about'},
-        {title: 'Persona', icon: 'mdi-human', link:'/personaList'},
+        {title: 'Persona', icon: 'mdi-human', link:'/personaList', permiso:'index_persona'},
       ],
     }
   },
