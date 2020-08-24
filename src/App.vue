@@ -112,6 +112,7 @@ export default {
         {title: 'Home', icon: 'mdi-home', link:'/'},
         {title: 'About', icon: 'mdi-help-circle', link:'/about'},
         {title: 'Persona', icon: 'mdi-human', link:'/personaList', permiso:'index_persona'},
+        {title: 'Mapa', icon: 'mdi-map', link:'/mapa'},
       ],
     }
   },

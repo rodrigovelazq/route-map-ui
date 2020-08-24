@@ -5,13 +5,13 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import VueLayers from 'vuelayers'
 import 'vuelayers/lib/style.css' // needs css-loader
-//import * as VueGoogleMaps from 'vue2-google-maps  '
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.config.productionTip = false
 
-/*Vue.use(VueGoogleMaps, {
+Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyCc9AaEqH4tbR0XHMNE5ixwX4gqkgz2_bI',
+    key: process.env.VUE_APP_GOOGLE_MAPS_API_KEY,
     libraries: 'places', // This is required if you use the Autocomplete plugin
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'
@@ -33,7 +33,7 @@ Vue.config.productionTip = false
   //// then set installComponents to 'false'.
   //// If you want to automatically install all the components this property must be set to 'true':
   installComponents: true
-})*/
+})
 
 Vue.use(VueLayers)
 

@@ -7,6 +7,7 @@ import Register from '../components/auth/Register'
 import Login from '../components/auth/Login'
 import PersonaList from '../components/persona/PersonaList'
 import PersonaForm from '../components/persona/PersonaForm'
+import Mapa from '../components/mapa/Mapa'
 
 Vue.use(VueRouter)
 
@@ -73,6 +74,11 @@ const router = new VueRouter({
                 requiresAuth: true,
                 permiso: 'update_persona'
             }
+        },
+        {
+            path: '/mapa',
+            name: 'Mapa',
+            component: Mapa,
         },
     ]
 })
